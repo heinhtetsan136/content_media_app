@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:media_content_library/feature/blog/ui/blog_screen.dart';
+import 'package:media_content_library/feature/blog/ui/screen/blog_screen.dart';
 import 'package:media_content_library/feature/ui/widget/bottom_navigation.dart';
 class Home extends StatefulWidget {
   const Home({super.key});

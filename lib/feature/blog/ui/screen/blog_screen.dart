@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_content_library/feature/blog/data/blog_model.dart';
+import 'package:media_content_library/feature/blog/ui/widget/blog_Item.dart';
 
-import '../notifier/blog_list_notifier.dart';
-import '../notifier/blog_list_state.dart';
+import '../../notifier/blog_list_notifier.dart';
+import '../../notifier/blog_list_state.dart';
 
 typedef BlogListProvider =
     NotifierProvider<
@@ -79,22 +80,7 @@ class _BlogScreenState
           String? comment="${blogData.comments?.length} comments";
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                coverImage == null
-                    ? Icon(Icons.image)
-                    : Image.network(coverImage!),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(blogData.author ?? ""),
-
-                    Text(comment ?? ""),
-                  ],
-                ),
-
-              ],
-            ),
+            child: BlogItem(blogData: blogData)
           );
         }),
       );
