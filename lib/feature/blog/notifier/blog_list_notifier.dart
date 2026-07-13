@@ -12,7 +12,32 @@ class BlogListNotifier
     return BlogListState();
   }
 
+  void loadMore() async {
+    _page = _page + 1;
+    try {
+      state = state.copyWidth(
+        isPaginateLoading: true,
+      );
+      BlogModel blogModel = await blogService
+          .getBlogList(page: _page);
+      blogModel = blogModel.copyWith(
+        data: [
+          ...?state.blogModel?.data,
+          ...?blogModel.data,
+        ],
+      );
+      state = state.copyWidth(
+        blogModel: blogModel,
+        isPaginateLoading: false,
+      );
+    } catch (e) {
+      state=state.copyWidth(isPaginateLoading: false,);
+    }
+  }
+
+  int _page = 1;
   void getBlogList() async {
+    _page = 1;
     try {
       state = state.copyWidth(
         isLoading: true,

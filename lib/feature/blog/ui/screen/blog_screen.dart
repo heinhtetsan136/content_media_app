@@ -72,8 +72,24 @@ class _BlogScreenState
         );
       }
       return ListView.builder(
-        itemCount: blogList.length,
+        itemCount: blogList.length+1,
         itemBuilder: ((_, i) {
+          if(i==blogList.length){
+            if(i==state.blogModel?.total){
+              return Center(
+                child: Text("No more data"),
+              );
+            }
+            if(state.isPaginateLoading ==false){
+              Future((){
+                ref.read(_blogListProvider.notifier).loadMore();
+              });
+            }
+            return Container(
+                padding: EdgeInsets.all(8),
+                alignment: Alignment.center,
+                child: CircularProgressIndicator());
+          }
           BlogData blogData = blogList[i];
           String? coverImage =
               blogData.coverImage;
