@@ -20,7 +20,14 @@ class BlogCoverImage extends StatelessWidget {
           child: CircularProgressIndicator(),
         ),
       );
-    },) ;
+    },
+    errorBuilder: (_,_,_){
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Icon(Icons.image_not_supported,size: 80,),
+        );
+    },
+    ) ;
   }
 }
 

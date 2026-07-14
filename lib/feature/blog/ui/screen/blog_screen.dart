@@ -4,6 +4,7 @@ import 'package:media_content_library/const/responsive/responsive_layout.dart';
 import 'package:media_content_library/feature/blog/data/blog_model.dart';
 import 'package:media_content_library/feature/blog/ui/widget/blog_Item.dart';
 
+import '../../../ui/widget/failed_widget.dart';
 import '../../notifier/blog_list_notifier.dart';
 import '../../notifier/blog_list_state.dart';
 import '../widget/desktop_blog_list.dart';
@@ -53,23 +54,11 @@ class _BlogScreenState
       );
     }
     if (state.isError) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Text("Something went wrong"),
-            SizedBox(height: 8),
-            OutlinedButton(
-              onPressed: () {
-                ref
-                    .read(_blogListProvider.notifier)
-                    .getBlogList();
-              },
-              child: Text("Try again"),
-            ),
-          ],
-        ),
-      );
+      return FailedWidget(ref: ref, onTry:(){
+        ref
+            .read(_blogListProvider.notifier)
+            .getBlogList();
+      });
     } else {
       List<BlogData>? blogList =
           state.blogModel?.data ?? [];
@@ -91,5 +80,6 @@ class _BlogScreenState
     }
   }
 }
+
 
 
