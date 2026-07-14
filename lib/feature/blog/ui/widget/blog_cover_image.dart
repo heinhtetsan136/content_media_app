@@ -6,8 +6,7 @@ class BlogCoverImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme=Theme.of(context).colorScheme;
-    return  AspectRatio(aspectRatio:16/9,
-    child:  imageUrl ==null ?   Container(
+    return  imageUrl ==null ?   Container(
       color:colorScheme.surfaceContainerHighest ,
       child: Icon(Icons.image_outlined),
     ):Image.network(
@@ -21,8 +20,7 @@ class BlogCoverImage extends StatelessWidget {
           child: CircularProgressIndicator(),
         ),
       );
-    },),
-    ) ;
+    },) ;
   }
 }
 
