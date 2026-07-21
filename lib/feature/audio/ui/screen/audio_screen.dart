@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:media_content_library/const/responsive/responsive_layout.dart';
 import 'package:media_content_library/feature/audio/data/audio_model.dart';
-import 'package:media_content_library/feature/audio/notifier/audio_notifier.dart';
-import 'package:media_content_library/feature/audio/notifier/audio_state_model.dart';
+import 'package:media_content_library/feature/audio/notifier/audio/audio_notifier.dart';
+import 'package:media_content_library/feature/audio/notifier/audio/audio_state_model.dart';
+import 'package:media_content_library/feature/audio/ui/screen/widget/desktop_audio_screen.dart';
+import 'package:media_content_library/feature/audio/ui/screen/widget/mobile_audio_screen.dart';
 import 'package:media_content_library/feature/audio/ui/widget/audio_item.dart';
 import 'package:media_content_library/feature/blog/ui/widget/blog_cover_image.dart';
 import 'package:media_content_library/feature/ui/widget/failed_widget.dart';
@@ -34,7 +37,9 @@ class _AudioScreenState
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme=Theme.of(context).colorScheme;
+    final ColorScheme colorScheme = Theme.of(
+      context,
+    ).colorScheme;
     AudioStateModel stateModel = ref.watch(
       audioProvider,
     );
@@ -57,16 +62,19 @@ class _AudioScreenState
       );
     }
 
-    return ListView.builder(
-      itemBuilder: (_, i) {
-        AudioData data = _audiodatalist[i];
-        return AudioItem(data: data, colorScheme: colorScheme);
-      },
-      itemCount: _audiodatalist.length,
+    return ResponsiveLayout(
+      desktop: DesktopAudioScreen(  audiodatalist: _audiodatalist,
+        stateModel: stateModel,
+        ref: ref,
+        audioProvider: audioProvider,
+        colorScheme: colorScheme,),
+      mobile: MobileAudioScreen(
+        audiodatalist: _audiodatalist,
+        stateModel: stateModel,
+        ref: ref,
+        audioProvider: audioProvider,
+        colorScheme: colorScheme,
+      ),
     );
-
-    ;
   }
 }
-
-

@@ -14,6 +14,7 @@ class BlogCoverImage extends StatelessWidget {
       imageUrl!,fit: BoxFit.cover,loadingBuilder: (_,child,progress){
       if(progress==null) return child;
       return Container(
+
         color: colorScheme.surfaceContainerHighest,
         child: Align(
           alignment: Alignment.center,

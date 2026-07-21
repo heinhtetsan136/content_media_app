@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:media_content_library/const/api_const/api_const.dart';
-import 'package:media_content_library/feature/audio/data/audio_model.dart';
-import 'package:media_content_library/feature/blog/ui/widget/blog_cover_image.dart';
+import 'package:media_content_library/feature/video/data/video_model.dart';
 
-class AudioItem extends StatelessWidget {
+import '../../../../const/api_const/api_const.dart';
+import '../../../blog/ui/widget/blog_cover_image.dart';
+
+class VideoItem extends StatelessWidget {
   bool isMobile;
-   AudioItem({
+  VideoItem({
     super.key,
     required this.data,
     this.isMobile=true,
@@ -14,7 +15,7 @@ class AudioItem extends StatelessWidget {
 
   });
 
-  final AudioData data;
+  final VideoData data;
   final ColorScheme colorScheme;
 
 
@@ -22,7 +23,7 @@ class AudioItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        context.push("/details/${ApiConst.audio}/${data.id}");
+        context.push("/details/${ApiConst.video}/${data.id}");
       },
       child: Container(
         decoration: BoxDecoration(
@@ -54,12 +55,12 @@ class AudioItem extends StatelessWidget {
                       ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
                     ),
                     SizedBox(height: 4),
-                    Text(data.artist ?? "",maxLines: 1,
-                      overflow:
-                      TextOverflow.ellipsis,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodySmall?.copyWith(color:colorScheme.onSurfaceVariant ),),
+                    // Text(data.source ?? "",maxLines: 1,
+                    //   overflow:
+                    //   TextOverflow.ellipsis,
+                    //   style: Theme.of(
+                    //     context,
+                    //   ).textTheme.bodySmall?.copyWith(color:colorScheme.onSurfaceVariant ),),
                     SizedBox(height: 4),
                     Container(
                         padding: EdgeInsets.all(4),
@@ -67,7 +68,7 @@ class AudioItem extends StatelessWidget {
                             borderRadius: BorderRadius.circular(6),
                             color: colorScheme.surfaceContainerHighest
                         ),
-                        child: Text(data.type ?? "Audio",style: TextStyle(
+                        child: Text(data.source ?? "",style: TextStyle(
                             color: colorScheme.onSurfaceVariant
                         ),)),
                     SizedBox(height: 4),
@@ -87,18 +88,18 @@ class AudioItem extends StatelessWidget {
     );
   }
   Widget _checkItem({required List<Widget> children}){
-  return  isMobile ? SizedBox(
-    height: 100,
-    width: 100,
-    child: Row(
-      children: children,
-    ),
-  ):SizedBox(
-    height: 150,
-    width: 150,
-    child: Column(
-      children: children,
-    ),
-  );
+    return  isMobile ? SizedBox(
+      height: 100,
+      width: 100,
+      child: Row(
+        children: children,
+      ),
+    ):SizedBox(
+      height: 150,
+      width: 150,
+      child: Column(
+        children: children,
+      ),
+    );
   }
 }

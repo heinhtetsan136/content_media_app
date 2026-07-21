@@ -22,7 +22,7 @@ class _MyWebViewState extends State<MyWebView> {
     final  div=web.HTMLDivElement();
     div.style.height="100%";
     div.style.width="100%";
-    div.style.overflow="auto%";
+    div.style.overflow="auto";
     div.setHTMLUnsafe(widget.htmlString.toJS);
     return div;
 
