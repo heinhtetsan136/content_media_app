@@ -42,6 +42,7 @@ class _VideoDetailState
 
   @override
   Widget build(BuildContext context) {
+
     VideoDetailStateModel videoDetailStateModel =
         ref.watch(videoDetailProvider);
     return Scaffold(
@@ -78,6 +79,7 @@ class _VideoDetailState
     }
     VideoData? videoData =
         videoDetailStateModel.videoData;
+    final bool isYoutubePlayer=videoData?.source=="youtube"&& videoData?.url!=null;
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Center(
@@ -87,15 +89,19 @@ class _VideoDetailState
           ),
           child: Column(
             children: [
-              Text(videoData?.description ?? ""),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(videoData?.description ?? ""),
+              ),
               if (videoData?.source == "direct" &&
                   videoData?.url != null)
                 DirectVideoPlayer(
                   link: videoData?.url ?? "",
                 ),
-              if(videoData?.source=="youtube"&& videoData?.url!=null)
-                if(kIsWeb )
+
+                if(isYoutubePlayer &&kIsWeb )
                 MyWebYouTube(url: videoData?.url ??""),
+               if(isYoutubePlayer&& !kIsWeb)
                MyYoutubePlayer(url: videoData?.url ??""),
             ],
           ),

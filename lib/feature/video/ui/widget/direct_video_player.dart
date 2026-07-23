@@ -34,6 +34,7 @@ class _DirectVideoPlayerState
           Uri.parse(widget.link),
         );
     videoPlayerController.initialize().then((_) {
+      videoPlayerController.play();
       setState(() {});
     });
     WidgetsBinding.instance.addPostFrameCallback(

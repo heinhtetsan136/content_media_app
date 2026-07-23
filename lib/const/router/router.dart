@@ -11,6 +11,8 @@ import 'package:media_content_library/feature/ui/home/home.dart';
 import 'package:media_content_library/feature/video/ui/screen/video_screen.dart';
 import 'package:media_content_library/feature/video/ui/video_detail/video_detail.dart';
 
+import '../../feature/pdf/ui/screen/pdf_detail.dart';
+
 GoRouter goRoute = GoRouter(
   initialLocation: "/",
   routes: [
@@ -78,6 +80,9 @@ GoRouter goRoute = GoRouter(
      }
      else if(type==ApiConst.video){
        return VideoDetail(id: id);
+     }
+     else if(type==ApiConst.pdf){
+       return PdfDetail(id:id);
      }
      return Scaffold(body: Text("error"));
     }),
