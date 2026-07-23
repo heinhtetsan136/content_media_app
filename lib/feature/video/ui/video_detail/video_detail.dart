@@ -1,9 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_content_library/feature/ui/widget/failed_widget.dart';
 import 'package:media_content_library/feature/video/data/video_model.dart';
 import 'package:media_content_library/feature/video/notifier/detail/video_detail_notifier.dart';
 import 'package:media_content_library/feature/video/notifier/detail/video_detail_state_model.dart';
+import 'package:media_content_library/feature/video/ui/widget/direct_video_player.dart';
+import 'package:media_content_library/feature/video/ui/widget/my_youtube_player.dart';
+import 'package:media_content_library/feature/video/ui/widget/web_youtube_player.dart';
 
 class VideoDetail extends ConsumerStatefulWidget {
   final String? id;
@@ -39,11 +43,18 @@ class _VideoDetailState
   @override
   Widget build(BuildContext context) {
     VideoDetailStateModel videoDetailStateModel =
-    ref.watch(videoDetailProvider);
+        ref.watch(videoDetailProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(videoDetailStateModel.videoData?.title ?? ""),),
+      appBar: AppBar(
+        title: Text(
+          videoDetailStateModel
+                  .videoData
+                  ?.title ??
+              "",
+        ),
+      ),
 
-      body: _videoDetailBody(),
+      body: SingleChildScrollView(child: _videoDetailBody()),
     );
   }
 
@@ -65,14 +76,29 @@ class _VideoDetailState
         },
       );
     }
-    VideoData? videoData=videoDetailStateModel.videoData ;
-    return Center(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 500),
-        child: Column(
-          children: [
-            Text(videoData?.description  ?? ""),
-          ],
+    VideoData? videoData =
+        videoDetailStateModel.videoData;
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: 500,
+          ),
+          child: Column(
+            children: [
+              Text(videoData?.description ?? ""),
+              if (videoData?.source == "direct" &&
+                  videoData?.url != null)
+                DirectVideoPlayer(
+                  link: videoData?.url ?? "",
+                ),
+              if(videoData?.source=="youtube"&& videoData?.url!=null)
+                if(kIsWeb )
+                MyWebYouTube(url: videoData?.url ??""),
+               MyYoutubePlayer(url: videoData?.url ??""),
+            ],
+          ),
         ),
       ),
     );
