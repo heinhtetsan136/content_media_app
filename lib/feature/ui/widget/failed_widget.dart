@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FailedWidget extends StatelessWidget {
+  String? errorMessage;
   FailedWidget({
     super.key,
     required this.ref,
     required this.onTry,
+    this.errorMessage
   });
 
   final WidgetRef ref;
@@ -17,7 +19,7 @@ class FailedWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Text("Something went wrong"),
+          Text(errorMessage??"Something went wrong"),
           SizedBox(height: 8),
           OutlinedButton(
             onPressed: () {

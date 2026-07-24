@@ -4,4 +4,6 @@ class ApiConst {
   static const video="video";
   static const audio="audio";
   static const pdf="pdf";
+  static const signUpOtp="auth/signup-otp";
+  static const signUp="auth/signup";
 }
