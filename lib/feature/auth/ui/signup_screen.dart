@@ -31,7 +31,7 @@ class _SignupScreenState
     final signUpState=ref.watch(_signupProvider);
     final otpState = ref.watch(_signupOtpProvider);
     return Scaffold(
-      appBar: AppBar(title: Text("Sign Up")),
+      appBar: AppBar(title: Text("Sign Up Screen")),
       body: Center(
         child: Column(
           crossAxisAlignment:
