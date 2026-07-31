@@ -5,6 +5,7 @@ import 'package:media_content_library/feature/blog/ui/widget/blog_cover_image.da
 import 'package:media_content_library/feature/pdf/notifier/pdf_detail/pdf_detail_notifier.dart';
 import 'package:media_content_library/feature/pdf/service/pdf_model.dart';
 import 'package:media_content_library/feature/ui/widget/failed_widget.dart';
+import 'package:media_content_library/feature/ui/widget/floating_action/common_floating_action.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -40,6 +41,16 @@ class _PdfDetailState
   Widget build(BuildContext context) {
     final state = ref.watch(pdfDetailProvider);
     return Scaffold(
+      floatingActionButton:
+          state.pdfData?.title != null
+          ? CommonFloatingAction(
+              ref: ref,
+              id: widget.id,
+              title: state.pdfData?.title,
+              type: "pdf",
+              comments: state.pdfData?.comments,
+            )
+          : null,
       appBar: AppBar(
         title: Text(
           state.pdfData?.title ??
@@ -69,17 +80,18 @@ class _PdfDetailState
     }
     PdfData? pdfData = state.pdfData;
 
-
     return pdfData?.url?.isNotEmpty == true
-
         ? kIsWeb
               ? Center(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment:
+                        MainAxisAlignment.center,
                     children: [
-
-                      BlogCoverImage(pdfData?.previewImage ??""),
-                      SizedBox(height: 10,),
+                      BlogCoverImage(
+                        pdfData?.previewImage ??
+                            "",
+                      ),
+                      SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () {
                           launchUrl(

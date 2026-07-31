@@ -18,7 +18,7 @@ class _MyBottomNavigationState extends State<MyBottomNavigation> {
         },
 
         destinations: [
-      NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
+      NavigationDestination(icon: Icon(Icons.home), label: 'Blog'),
       NavigationDestination(icon: Icon(Icons.audio_file  ), label: "Audio"),
       NavigationDestination(icon: Icon(Icons.video_library), label: "Video"),
       NavigationDestination(icon: Icon(Icons.picture_as_pdf), label: "Pdf"),

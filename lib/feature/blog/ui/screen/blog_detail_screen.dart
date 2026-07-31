@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_content_library/feature/blog/notifier/blog_detail/blog_detail_notifier.dart';
+import 'package:media_content_library/feature/comment/common_dialog.dart';
+import 'package:media_content_library/feature/comment/data/comment_model.dart';
 import 'package:media_content_library/feature/ui/widget/web_view/web_view_common.dart';
 
+import '../../../ui/widget/floating_action/common_floating_action.dart';
 
 class BlogDetailScreen
     extends ConsumerStatefulWidget {
@@ -44,22 +47,30 @@ class _BlogDetailScreenState
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(blogDetailProvider);
-    final String title=state.blogData?.title ??"";
-
-return Scaffold(
-  appBar: AppBar(
-
-    title: title.isNotEmpty ? Text(title):SizedBox.shrink(),
-  ),
-  body: _blogDetailBody(),
-);
-
+    final String? title = state.blogData?.title;
+    final List<CommentModel>? comments =
+        state.blogData?.comments;
+    return Scaffold(
+      floatingActionButton: title != null
+          ? CommonFloatingAction(
+              ref: ref,
+              type: widget.type,
+              id: widget.id,
+              title: title,
+              comments: comments,
+            )
+          : null,
+      appBar: AppBar(
+        title: Text(title ?? "...."),
+      ),
+      body: _blogDetailBody(),
+    );
   }
-  Widget _blogDetailBody(){
 
-
+  Widget _blogDetailBody() {
     final state = ref.watch(blogDetailProvider);
-    final String content=state.blogData?.content ?? "";
+    final String content =
+        state.blogData?.content ?? "";
 
     if (state.isLoading) {
       return Center(
@@ -77,12 +88,12 @@ return Scaffold(
               onPressed: () {
                 ref
                     .read(
-                  blogDetailProvider.notifier,
-                )
+                      blogDetailProvider.notifier,
+                    )
                     .getBlogDetail(
-                  type: widget.type,
-                  id: widget.id,
-                );
+                      type: widget.type,
+                      id: widget.id,
+                    );
               },
               child: Text("Try again"),
             ),
@@ -90,10 +101,10 @@ return Scaffold(
         ),
       );
     }
-    if(state.isSucess) {
-      return content.isNotEmpty ? MyWebView(
-        htmlString: content,
-      ) : SizedBox.shrink();
+    if (state.isSucess) {
+      return content.isNotEmpty
+          ? MyWebView(htmlString: content)
+          : SizedBox.shrink();
     }
     return SizedBox.shrink();
   }

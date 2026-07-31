@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:media_content_library/const/api_const/api_const.dart';
 import 'package:media_content_library/feature/audio/ui/screen/audio_screen.dart';
 import 'package:media_content_library/feature/audio/ui/screen/detail/audio_detail.dart';
+import 'package:media_content_library/feature/auth/ui/signin_screen.dart';
 import 'package:media_content_library/feature/auth/ui/signup_screen.dart';
 import 'package:media_content_library/feature/blog/ui/screen/blog_detail_screen.dart';
 import 'package:media_content_library/feature/blog/ui/screen/blog_screen.dart';
@@ -91,5 +92,8 @@ GoRouter goRoute = GoRouter(
   GoRoute(path: "/signUp",builder: (_,state){
     return SignupScreen();
   }),
+    GoRoute(path: "/login",builder: (_,state){
+      return SigninScreen();
+    }),
   ],
 );

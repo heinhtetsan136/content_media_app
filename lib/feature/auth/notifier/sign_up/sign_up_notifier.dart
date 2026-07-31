@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:media_content_library/const/di/locator.dart';
+import 'package:media_content_library/const/storage/user_session.dart';
+import 'package:media_content_library/feature/auth/data/model/sign_up_model.dart';
 import 'package:media_content_library/feature/auth/notifier/sign_up/sign_up_state_model.dart';
 
 import '../../data/service/auth_service.dart';
@@ -12,6 +15,8 @@ typedef SignupProvider =
 
 class SignUpNotifier
     extends Notifier<SignUpStateModel> {
+  final UserSession userSession = getIt
+      .get<UserSession>();
   @override
   SignUpStateModel build() {
     // TODO: implement build
@@ -49,22 +54,53 @@ class SignUpNotifier
             password: password,
             otp: otp,
           );
+      await _saveUserCreditial(signUpModel);
       state = state.copyWith(
         isLoading: false,
         isSucces: true,
         signUpModel: signUpModel,
       );
-    } catch (e) {
-      String errorMessage="Something Wrong";
-      if(e is DioException){
-        errorMessage=e.response?.data["message"] ??errorMessage;
+      await _saveUserCreditial(signUpModel);
+    }
+
+    catch (e) {
+
+      String errorMessage = "Something Wrong";
+      if (e is DioException) {
+        final error =
+            e.response?.data;
+        print(error);
+        if(error is Map?){
+          errorMessage=error?["message"] ?? errorMessage;
+        }
       }
+
+      print(errorMessage);
       state = state.copyWith(
+        initialState: false,
         isLoading: false,
         isSucces: false,
         isFailed: true,
-        errorMessage: "$errorMessage",
+        errorMessage: errorMessage,
       );
     }
   }
+
+  Future<void> _saveUserCreditial(
+    SignUpModel signUpModel,
+  ) async {
+    await userSession.saveName(
+      name: signUpModel.user?.name ?? "",
+    );
+    await userSession.saveId(
+      id: signUpModel.user?.id?.toString() ?? "",
+    );
+    await userSession.saveToken(
+      token: signUpModel.token ?? "",
+    );
+    await userSession.saveEmail(
+      email: signUpModel.user?.email ?? "",
+    );
+  }
+
 }

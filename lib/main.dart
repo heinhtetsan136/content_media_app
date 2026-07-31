@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:media_content_library/const/router/router.dart';
 
 import 'const/di/locator.dart';
@@ -9,8 +10,10 @@ import 'feature/ui/home/home.dart';
 
 
 void main()async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await setUpLocator();
+  usePathUrlStrategy();
   runApp(ProviderScope(child: const MyApp()));
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_content_library/feature/ui/widget/failed_widget.dart';
+import 'package:media_content_library/feature/ui/widget/floating_action/common_floating_action.dart';
 import 'package:media_content_library/feature/video/data/video_model.dart';
 import 'package:media_content_library/feature/video/notifier/detail/video_detail_notifier.dart';
 import 'package:media_content_library/feature/video/notifier/detail/video_detail_state_model.dart';
@@ -42,10 +43,24 @@ class _VideoDetailState
 
   @override
   Widget build(BuildContext context) {
-
     VideoDetailStateModel videoDetailStateModel =
         ref.watch(videoDetailProvider);
     return Scaffold(
+      floatingActionButton:
+          videoDetailStateModel
+                  .videoData
+                  ?.title !=
+              null
+          ? CommonFloatingAction(
+              ref: ref,
+              id: widget.id,
+              title: videoDetailStateModel
+                  .videoData
+                  ?.title,
+              type: "video",
+              comments: videoDetailStateModel.videoData?.comments,
+            )
+          : null,
       appBar: AppBar(
         title: Text(
           videoDetailStateModel
@@ -55,7 +70,9 @@ class _VideoDetailState
         ),
       ),
 
-      body: SingleChildScrollView(child: _videoDetailBody()),
+      body: SingleChildScrollView(
+        child: _videoDetailBody(),
+      ),
     );
   }
 
@@ -79,7 +96,9 @@ class _VideoDetailState
     }
     VideoData? videoData =
         videoDetailStateModel.videoData;
-    final bool isYoutubePlayer=videoData?.source=="youtube"&& videoData?.url!=null;
+    final bool isYoutubePlayer =
+        videoData?.source == "youtube" &&
+        videoData?.url != null;
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Center(
@@ -90,8 +109,12 @@ class _VideoDetailState
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(videoData?.description ?? ""),
+                padding: const EdgeInsets.all(
+                  8.0,
+                ),
+                child: Text(
+                  videoData?.description ?? "",
+                ),
               ),
               if (videoData?.source == "direct" &&
                   videoData?.url != null)
@@ -99,10 +122,14 @@ class _VideoDetailState
                   link: videoData?.url ?? "",
                 ),
 
-                if(isYoutubePlayer &&kIsWeb )
-                MyWebYouTube(url: videoData?.url ??""),
-               if(isYoutubePlayer&& !kIsWeb)
-               MyYoutubePlayer(url: videoData?.url ??""),
+              if (isYoutubePlayer && kIsWeb)
+                MyWebYouTube(
+                  url: videoData?.url ?? "",
+                ),
+              if (isYoutubePlayer && !kIsWeb)
+                MyYoutubePlayer(
+                  url: videoData?.url ?? "",
+                ),
             ],
           ),
         ),

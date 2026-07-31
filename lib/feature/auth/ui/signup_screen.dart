@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:media_content_library/const/di/locator.dart';
 import 'package:media_content_library/feature/auth/notifier/sign_up/otp/sign_up_otp_notifier.dart';
 import 'package:media_content_library/feature/auth/notifier/sign_up/sign_up_notifier.dart';
+import 'package:media_content_library/feature/setting/notifier/profile/profile_notifier.dart';
 import 'package:media_content_library/feature/ui/widget/failed_widget.dart';
 
 class SignupScreen
@@ -26,12 +29,50 @@ class _SignupScreenState
   GlobalKey<FormState> formKey =
       GlobalKey<FormState>();
   String? _name, _email, _password;
+  final ProfileProvider _profileProvider = getIt
+      .get();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      ref.read(_profileProvider.notifier).checkAuth();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final signUpState=ref.watch(_signupProvider);
-    final otpState = ref.watch(_signupOtpProvider);
+    ref.listen(_profileProvider, (
+      oldState,
+      newState,
+    ) {
+      if (newState.token?.isNotEmpty == true) {
+        context.go("/");
+      }
+    });
+    ref.listen(_signupProvider, (o, n) async {
+      if (n.isSuccess &&
+          n.signUpModel?.token?.isNotEmpty ==
+              true) {
+        Future.delayed(Duration(seconds: 1));
+        ref
+            .read(_profileProvider.notifier)
+            .checkAuth();
+        if (context.mounted) {
+          context.go("/settings");
+        }
+      }
+    });
+    final signUpState = ref.watch(
+      _signupProvider,
+    );
+    final otpState = ref.watch(
+      _signupOtpProvider,
+    );
     return Scaffold(
-      appBar: AppBar(title: Text("Sign Up Screen")),
+      appBar: AppBar(
+        title: Text("Sign Up Screen"),
+      ),
       body: Center(
         child: Column(
           crossAxisAlignment:
@@ -110,6 +151,7 @@ class _SignupScreenState
                         ),
                         SizedBox(height: 8),
                         TextFormField(
+                          obscureText: true,
                           onSaved: (p) {
                             print(p);
                             _password = p;
@@ -167,33 +209,42 @@ class _SignupScreenState
                   ),
                 ),
               ),
-            if (otpState.isLoading || signUpState.isLoading)
+            if (otpState.isLoading ||
+                signUpState.isLoading)
               Center(
                 child:
                     CircularProgressIndicator(),
               ),
-            if (otpState.isFailed || signUpState.isFailed)
+            if (otpState.isFailed ||
+                signUpState.isFailed)
               FailedWidget(
-                errorMessage: otpState.isFailed ? otpState.errorMessage :signUpState.errorMessage  ,
+                errorMessage: otpState.isFailed
+                    ? otpState.errorMessage
+                    : signUpState.errorMessage,
 
                 ref: ref,
                 onTry: () {
-                  if(otpState.isFailed){
+                  if (otpState.isFailed) {
                     ref
                         .read(
-                      _signupOtpProvider
-                          .notifier,
-                    )
+                          _signupOtpProvider
+                              .notifier,
+                        )
                         .failed();
                     return;
                   }
-                  if(signUpState.isFailed){
-                    ref.read(_signupProvider.notifier).tryAgin();
+                  if (signUpState.isFailed) {
+                    ref
+                        .read(
+                          _signupProvider
+                              .notifier,
+                        )
+                        .tryAgin();
                   }
-
                 },
               ),
-            if (otpState.isSuccess && signUpState.initialState)
+            if (otpState.isSuccess &&
+                signUpState.initialState)
               Container(
                 padding: EdgeInsets.all(8),
                 constraints: BoxConstraints(
@@ -223,7 +274,7 @@ class _SignupScreenState
                         if (_controller.text
                                 .trim()
                                 .length !=
-                            6 ) {
+                            6) {
                           ScaffoldMessenger.of(
                             context,
                           ).showSnackBar(
@@ -255,6 +306,8 @@ class _SignupScreenState
                   ],
                 ),
               ),
+            if (signUpState.isSuccess)
+              Center(child: Text("Success")),
           ],
         ),
       ),

@@ -6,4 +6,9 @@ class ApiConst {
   static const pdf="pdf";
   static const signUpOtp="auth/signup-otp";
   static const signUp="auth/signup";
+  static const signIn="auth/login";
+
+  static String addCommentUrl(String id,String type){
+    return "content/$type/$id/comments";
+  }
 }

@@ -7,6 +7,9 @@ import 'package:media_content_library/feature/audio/notifier/audio/audio_notifie
 import 'package:media_content_library/feature/audio/notifier/audio_detail/audio_detail_notifier.dart';
 import 'package:media_content_library/feature/audio/notifier/audio_detail/audio_detail_state_model.dart';
 import 'package:media_content_library/feature/ui/widget/failed_widget.dart';
+import 'package:media_content_library/feature/ui/widget/floating_action/common_floating_action.dart';
+
+import '../../../../comment/common_dialog.dart';
 
 class AudioDetail extends ConsumerStatefulWidget {
   final String? id;
@@ -45,7 +48,7 @@ class _AudioDetailState
         () => AudioDetailNotifier(),
       );
   String? _url;
-  bool isLoading=true;
+  bool isLoading = true;
   AudioPlayer audioPlayer = AudioPlayer();
   @override
   Widget build(BuildContext context) {
@@ -71,6 +74,16 @@ class _AudioDetailState
     });
 
     return Scaffold(
+      floatingActionButton:
+          audioData?.title != null
+          ? CommonFloatingAction(
+              ref: ref,
+              id: widget.id,
+              title: audioData?.title,
+              type:"audio",
+              comments: audioData?.comments,
+            )
+          : null,
       appBar: AppBar(
         title: Text(
           audioData?.title ?? "....Please Wait",
@@ -161,20 +174,16 @@ class _AudioDetailState
                     snap.data;
                 bool isPlay =
                     playerState?.playing ?? false;
-               isLoading= audioPlayer
-                    .processingState ==
+                isLoading =
+                    audioPlayer.processingState ==
                     ProcessingState.loading;
-                return  isLoading
-                    ?CircularProgressIndicator()
+                return isLoading
+                    ? CircularProgressIndicator()
                     : IconButton(
                         onPressed: () {
                           if (isPlay) {
                             audioPlayer.pause();
-                          }
-
-
-
-                          else if (audioPlayer
+                          } else if (audioPlayer
                                   .processingState ==
                               ProcessingState
                                   .ready) {

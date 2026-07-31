@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:media_content_library/const/api_const/api_const.dart';
 import 'package:media_content_library/const/di/locator.dart';
+import 'package:media_content_library/feature/auth/data/model/sigin_model.dart';
 import 'package:media_content_library/feature/auth/data/model/sign_up_model.dart';
 import 'package:media_content_library/feature/auth/data/model/singn_up_otp.dart';
 
@@ -34,5 +35,12 @@ class AuthService {
       },
     );
     return SignUpModel.fromJson(response.data);
+  }
+  Future<SignInModel> login({required String email,required String password})async{
+    final response=await _dio.post(ApiConst.signIn,data: {
+      "email":email,
+      "password":password,
+    });
+    return SignInModel.fromJson(response.data);
   }
 }
